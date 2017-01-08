@@ -1,0 +1,40 @@
+#
+# Docker-compose script (for testing only)
+#
+
+version: '2'
+services:
+  redis-master:
+    container_name: redis-master
+    #image: ausov/k8s-redis:3.2-alpine
+    build: ./3.2/alpine
+    volumes:
+      - /var/data/redis-master:/data
+    ports:
+      - "6379:6379"
+    mem_limit: 128m
+  redis-slave:
+    container_name: redis-slave
+    #image: ausov/k8s-redis:3.2-alpine
+    build: ./3.2/alpine
+    volumes:
+      - /var/data/redis-slave:/data
+    environment:
+      SLAVEOF: redis-master
+    ports:
+      - "6379"
+    links:
+      - redis-master
+    mem_limit: 128m
+  redis-sentinel:
+    container_name: redis-sentinel
+    #image: ausov/k8s-redis:3.2-alpine
+    build: ./3.2/alpine
+    environment:
+      SENTINEL: redis-master
+    ports:
+      - "26379"
+    mem_limit: 128m
+    links:
+      - redis-master
+      - redis-slave
