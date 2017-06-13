@@ -27,7 +27,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: redis-secondary
-        image: ausov/redis:3.2-alpine
+        image: ausov/k8s-redis:3.2-alpine
         imagePullPolicy: Always
         env:
         - name: SLAVEOF
